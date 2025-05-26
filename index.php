@@ -1,32 +1,34 @@
 <?php
-// Inicializar conexión MySQLi
-$con = mysqli_init();
+// Datos de conexión
+$hostname = "bddatos.mysql.database.azure.com";
+$port = 3306;
+$username = "idwin";
+$password = "Sandrauno1@";  // Cambia por tu contraseña real
+$database = "datos"; // Cambia por tu base de datos
 
-// Configurar SSL: cambia la ruta al certificado CA por la ruta correcta en tu servidor
-mysqli_ssl_set($con, NULL, NULL, "/var/www/html/DigiCertGlobalRootCA.crt.pem", NULL, NULL);
+// Crear conexión sin SSL
+$con = new mysqli($hostname, $username, $password, $database, $port);
 
-// Conectar con SSL habilitado
-if (!mysqli_real_connect($con, "bddatos.mysql.database.azure.com", "idwin", "Sandrauno1@", "datos", 3306, NULL, MYSQLI_CLIENT_SSL)) {
-    die('Error de conexión (' . mysqli_connect_errno() . '): ' . mysqli_connect_error());
+// Verificar conexión
+if ($con->connect_error) {
+    die("Error de conexión: " . $con->connect_error);
 }
 
-echo "Conexión establecida con SSL.<br>";
+echo "Conexión exitosa.<br>";
 
-// Definir la consulta SQL para crear la tabla
+// Crear tabla personas si no existe
 $sql = "CREATE TABLE IF NOT EXISTS personas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     edad INT NOT NULL
 )";
 
-// Ejecutar la consulta
 if ($con->query($sql) === TRUE) {
     echo "Tabla 'personas' creada correctamente.";
 } else {
     echo "Error al crear la tabla: " . $con->error;
 }
 
-// Cerrar la conexión
+// Cerrar conexión
 $con->close();
 ?>
-
