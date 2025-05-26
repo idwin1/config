@@ -3,7 +3,7 @@
 $con = mysqli_init();
 
 // Configurar SSL: cambia la ruta al certificado CA por la ruta correcta en tu servidor
-mysqli_ssl_set($con, NULL, NULL, "/ruta/a/tu/ca-cert.pem", NULL, NULL);
+mysqli_ssl_set($con, NULL, NULL, "DigiCertGlobalRootCA.crt.pem", NULL, NULL);
 
 // Conectar con SSL habilitado
 if (!mysqli_real_connect($con, "bddatos.mysql.database.azure.com", "idwin", "Sandrauno1@", "datos", 3306, NULL, MYSQLI_CLIENT_SSL)) {
