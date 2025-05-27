@@ -1,20 +1,26 @@
 <?php
 $host = 'dbdatos.mysql.database.azure.com';
 $port = 3306;
+$dbname = 'datos';
 $username = 'idwin';
-$password = 'Sandrauno1@';  // Reemplaza con tu contraseña real
-$database = 'datos'; // Reemplaza con el nombre real de tu base
+$password = 'Sandrauno1@';
 
-// Ruta al certificado SSL (descárgalo si no lo tienes aún)
-$ssl_ca = 'DigiCertGlobalRootG2.crt.pem'; // Cambia la ruta según donde lo pongas
+// Ruta al certificado SSL (ajusta según tu ruta real)
+$ssl_ca = 'DigiCertGlobalRootG2.crt.pem'; // Puede ser también BaltimoreCyberTrustRoot.crt.pem según Azure
 
-$conexion = new mysqli($host, $username, $password, $database, $port, null);
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";
+    $options = [
+        PDO::MYSQL_ATTR_SSL_CA => $ssl_ca,
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ];
 
-// Establecer SSL
-$conexion->ssl_set(NULL, NULL, $ssl_ca, NULL, NULL);
+    $conexion = new PDO($dsn, $username, $password, $options);
 
-// Verifica conexión
-if ($conexion->connect_error) {
-    die("❌ Conexión fallida: " . $conexion->connect_error);
+    // Conexión exitosa (puedes eliminar este mensaje si no quieres que se muestre en producción)
+    // echo "<h2 style='color:green;'>✅ Conexión establecida con PDO</h2>";
+} catch (PDOException $e) {
+    die("<h2 style='color:red;'>❌ Error de conexión: " . $e->getMessage() . "</h2>");
 }
 ?>
