@@ -1,6 +1,6 @@
 <?php
 // Datos de conexión
-$hostname = "bddatos.mysql.database.azure.com";
+$hostname = "dbdatos.mysql.database.azure.com";
 $port = 3306;
 $username = "idwin";
 $password = "Sandrauno1@";  // Cambia por tu contraseña real
