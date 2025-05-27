@@ -2,22 +2,22 @@
 $host = 'dbdatos.mysql.database.azure.com';
 $port = 3306;
 $username = 'idwin';
-$password = 'Sandrauno1@';
-$database = 'datos';
+$password = 'Sandrauno1@';  // Reemplaza con tu contraseña real
+$database = 'datos';  // Cambia esto si ya tienes una base
 
-// Ruta al certificado SSL
-$ssl_ca = 'DigiCertGlobalRootG2.crt.pem'; // Asegúrate que esté en el mismo directorio o coloca la ruta absoluta
+// Opciones para conexión SSL (requerido por Azure)
+$ssl_options = [
+    PDO::MYSQL_ATTR_SSL_CA => 'DigiCertGlobalRootG2.crt.pem', // Archivo de certificado de CA
+    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
+];
 
-$conexion = new mysqli();
-$conexion->ssl_set(NULL, NULL, $ssl_ca, NULL, NULL);
-$conexion->real_connect($host, $username, $password, $database, $port, NULL, MYSQLI_CLIENT_SSL);
-
-if ($conexion->connect_error) {
-    echo "<h2 style='color:red;'>❌ Conexión fallida: " . $conexion->connect_error . "</h2>";
-} else {
-    echo "<h2 style='color:green;'>✅ Conexión exitosa a la base de datos Azure MySQL</h2>";
-    echo "<p>Servidor: " . $conexion->host_info . "</p>";
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$database;charset=utf8";
+    $pdo = new PDO($dsn, $username, $password, $ssl_options);
+    echo "<h2 style='color:green;'>✅ Conexión exitosa a la base de datos MySQL en Azure.</h2>";
+} catch (PDOException $e) {
+    echo "<h2 style='color:red;'>❌ Error al conectar: " . $e->getMessage() . "</h2>";
 }
-
-$conexion->close();
+// Cerrar conexión
+$con->close();
 ?>
